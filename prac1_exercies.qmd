@@ -1,0 +1,131 @@
+---
+title: "Practical 1 Part 3 notes"
+author: "Jack Liu"
+format: html
+---
+
+## sqrt() -> double
+```{r}
+res <- sqrt(9.1)
+print(paste(res, typeof(res)))
+```
+
+## round() double (double-typed integer)
+```{r}
+res <- round(3.1415926, digits = 3)
+print(paste(res, typeof(res)))
+```
+
+## Generate an ordered sequence: 
+```{r}
+print(seq(from=1, to=10, by=2))
+```
+
+## Repeats a value: 
+```{r}
+lst = rep(x=5, times=7)
+print(paste(lst, typeof(lst)))
+```
+
+```{r}
+x <- 4e-3
+print(x)
+```
+
+
+```{r}
+ch = "I am happy :)"
+num = 142857
+log = TRUE
+
+print(paste(ch, num, log))
+print(paste(class(ch), class(num), class(log)))
+```
+
+
+```{r}
+cell_ID_CX1 = "CX1"
+cell_ID_CX2 = "CX2"
+treated_CX1 = TRUE
+treated_CX2 = FALSE
+num_cells_before_CX1 = 5415
+num_cells_before_CX2 = 8123
+num_cells_after_CX1 = 1432
+num_cells_after_CX2 = 7543
+
+print("cell_ID treated num_cells_before num_cell_after")
+print(paste(cell_ID_CX1, treated_CX1, num_cells_before_CX1, num_cells_after_CX1))
+print(paste(cell_ID_CX2, treated_CX2, num_cells_before_CX2, num_cells_after_CX2))
+```
+
+```{r}
+print(TRUE + TRUE) # TRUE == 1
+print(TRUE + FALSE) # FALSE == 0
+print(5 + TRUE)
+```
+
+
+```{r}
+x <- NA
+print(x == NA)
+print(is.na(x))
+
+x <- 0 / 0
+print(x)
+print(is.na(x))
+print(is.nan(x))
+
+y1 <- 1 / 0
+print(y1)
+print(paste(typeof(y1), class(y1)))
+
+
+y2 <- -1 / 0
+print(y2)
+print(paste(typeof(y2), class(y2)))
+```
+
+
+
+```{r}
+group <- factor(c("Control", "Treatment", "Control"))
+
+typeof(group)
+class(group)
+
+unclass(group)
+```
+
+
+```{r}
+df <- data.frame(
+  age = c(18, 19, 20),
+  name = c("Alice", "Bob", "Charlie")
+)
+
+typeof(df)
+class(df)
+
+print(df)
+summary(df)
+```
+
+```{r}
+x <- structure(
+  c(1, 2, 3),
+  class = "my_special_vector"
+)
+
+typeof(x)
+class(x)
+
+print(x)
+```
+
+
+```{r}
+x <- c(1, 2, NA, NaN, Inf, -Inf)
+
+is.na(x)
+is.nan(x)
+```
