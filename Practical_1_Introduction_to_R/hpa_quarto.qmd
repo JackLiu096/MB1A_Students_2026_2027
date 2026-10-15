@@ -1,0 +1,51 @@
+---
+title: "Practical 1 Part 2 BRAIN SUMMARY work"
+author: "Jack Liu"
+format: html
+---
+
+I will calculate the total number of genes with regionally elevated expression in the forebrain (cerebeal cortex, basal ganglia, thalamus, and hypothalamus) in human, pig and mouse, respectively. 
+
+## Human
+
+```{r}
+sum_human <- sum(180, 83, 57, 110) # Human sum
+print(sum_human)
+```
+
+Thus human have 430 genes with regionally elevated expression in the forebrain. 
+
+-------------------------------------------------
+
+## Pig
+
+```{r}
+sum_pig <- sum(109, 157, 31, 45)
+print(sum_pig)
+```
+
+Thus pig have 342 genes with regionally elevated expression in the forebrain. 
+
+-------------------------------------------------
+
+## Mouse
+
+```{r}
+sum_mouse <- sum(55, 185, 60, 98)
+print(sum_mouse)
+```
+
+Thus mouse have 398 genes with regionally elevated expression in the forebrain. 
+
+----------------------------------------
+
+**In summary, *human* have the highest number of genes with regionally elevated expression. **
+
+Species: 
+- Human
+- Pig
+- Mouse
+
+$$
+\int^{x}_{2} k^3 \cdot dk = \frac{1}{4}k^4 \vert^{k=x}_{k=2} = \frac{1}{4}(x^4 - 2^4) = \frac{1}{4}x^4 - 4
+$$
