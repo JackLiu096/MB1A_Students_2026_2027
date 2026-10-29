@@ -55,12 +55,12 @@ print(my_nums |> sum() |> sqrt() |> round()) # easier for applying a series of f
 bird_breeding_selected = breeding_site_locations |> select(Site, Longitude, Latitude) |> distinct()    # Filtering Columns & Prevent Duplicates
 gt(bird_breeding_selected)
 
-bird_breeding_selected = bird_breeding_selected |> rename(Breeding_Longitude = Longitude, Breeding_Latiture = Latitude)    # rename
+bird_breeding_selected = bird_breeding_selected |> rename(Breeding_Longitude = Longitude, Breeding_Latitude = Latitude)    # rename
 gt(bird_breeding_selected)
 
 
 # Data Filtering for the second df
-bird_migration_selected = migratory_connectivity |> select(Site, winterLongitude, winterLatitude, pslon, pslat, iblon, iblat, awestlon, awestlat) |> distinct() |> rename(Winter_Longitude = winterLongitude, Winter_Latitude = winterLatitude, Stopover_Longitude = pslon, Stopper_Latitude = pslat, Iberian_Longitude = iblon, Iberian_Latitude = iblat, Westmost_Longitude=awestlon, Westmost_Latitude=awestlat)
+bird_migration_selected = migratory_connectivity |> select(Site, winterLongitude, winterLatitude, pslon, pslat, iblon, iblat, awestlon, awestlat) |> distinct() |> rename(Winter_Longitude = winterLongitude, Winter_Latitude = winterLatitude, Stopover_Longitude = pslon, Stopover_Latitude = pslat, Iberian_Longitude = iblon, Iberian_Latitude = iblat, Westmost_Longitude=awestlon, Westmost_Latitude=awestlat)
 
 gt(bird_migration_selected)
 
@@ -83,8 +83,102 @@ gt(bird_breeding_long10)
 
 
 bird_breeding_exc <- bird_breeding_selected |> filter(Site != "Spain")
-bird_migration_exc <- bird_breeding_selected |> filter(Site != "Spain")
+bird_migration_exc <- bird_migration_selected |> filter(Site != "Spain")
 gt(bird_breeding_exc)
 gt(bird_migration_exc)
+
+# ---------------- Part 2 Starts Below ----------------------
+
+bird_migration_grouped <- bird_migration_exc |> group_by(Site)
+glimpse(bird_migration_grouped)
+
+
+lat_df <- bird_migration_grouped |> summarise(Highest_Lat_Stopover = max(Stopover_Latitude, na.rm = TRUE))
+gt(lat_df)
+
+lat_df <- bird_migration_grouped |> summarise(
+  Highest_Lat_Stopover = max(Stopover_Latitude, na.rm = TRUE),
+  Lowest_Lat_Stopover = min(Stopover_Latitude, na.rm = TRUE),
+  Mean_Lat_Stopover = mean(Stopover_Latitude, na.rm = TRUE),
+  Highest_Lat_Winter = max(Winter_Latitude, na.rm = TRUE),
+  Lowest_Lat_Winter = min(Winter_Latitude, na.rm = TRUE),
+  Mean_Lat_Winter = mean(Winter_Latitude, na.rm = TRUE)
+)
+gt(lat_df)
+
+
+
+bird_migration_summary <- bird_migration_grouped |> summarise(
+  Stopover_Latitude = median(Stopover_Latitude, na.rm = TRUE), 
+  Stopover_Longitude = median(Stopover_Longitude, na.rm = TRUE), 
+  Iberian_Latitude = median(Iberian_Latitude, na.rm = TRUE), 
+  Iberian_Longitude = median(Iberian_Longitude, na.rm = TRUE), 
+  Westmost_Latitude = median(Westmost_Latitude, na.rm = TRUE), 
+  Westmost_Longitude = median(Westmost_Longitude, na.rm = TRUE), 
+  Winter_Latitude = median(Winter_Latitude, na.rm = TRUE), 
+  Winter_Longitude = median(Winter_Longitude, na.rm = TRUE), 
+)
+gt(bird_migration_summary)
+
+
+
+# Joining DataFrames
+df_dept <- read_csv("data/depts.csv")
+df_score <- read_csv("data/scores.csv")
+gt(df_dept)
+gt(df_score)
+
+# Full Join retains all possible rows from both df, adding NA for no data
+full_join_example <- full_join(df_dept, df_score)
+gt(full_join_example)
+
+# Inner Join only retains rows where both df have data
+inner_join_example <- inner_join(df_dept, df_score)
+gt(inner_join_example)
+
+
+# Left Join retains all rows in df1, and adds data from df2 (if df1 lines have same idx of df2 lines, add df2 data, otherwise add NA to df2 lines)
+left_join_example <- left_join(df_dept, df_score)
+gt(left_join_example)
+
+# Right Join retails all rows in df2, and adds data from df1
+# [code ignored]
+
+
+
+
+combined_bird_data <- full_join(bird_breeding_exc, bird_migration_summary)
+gt(combined_bird_data)
+
+combined_bird_piv <- combined_bird_data |> pivot_longer(
+  cols = ends_with(c("_Longitude", "_Latitude")), 
+  names_sep = "_", 
+  names_to = c("Location_Type", ".value")
+)
+gt(combined_bird_piv)
+
+
+
+gt(df_dept)
+
+keep_depts <- c("Maths", "English")
+df_eng_maths <- df_dept |>
+  filter(Department %in% keep_depts)
+
+gt(df_eng_maths)
+
+
+
+
+spring_vals <- c("Breeding", "Stopover", "Winter")
+spring_data <- combined_bird_piv |>
+  filter(Location_Type %in% spring_vals)
+
+autumn_vals <- c("Breeding", "Iberian", "Westmost", "Winter")
+autumn_data <- combined_bird_piv |>
+  filter(Location_Type %in% autumn_vals)
+
+write_csv(spring_data, "output/birds_spring.csv")
+write_csv(autumn_data, "output/birds_autumn.csv")
 
 ```
