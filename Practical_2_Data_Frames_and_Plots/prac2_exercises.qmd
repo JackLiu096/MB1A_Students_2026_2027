@@ -1,0 +1,17 @@
+---
+title: "Prac2_Exercises"
+author: "Jack Liu"
+format: html
+---
+
+```{r}
+input_vec <- c(5, -10, 4, -3)
+res <- input_vec |> mean() |> abs() |> round()
+print(res)
+```
+
+```{r}
+12 -> y
+print(paste(y == 7, y < 15, y > 20, y <= 12))
+```
+
